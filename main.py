@@ -84,9 +84,9 @@ def verificalistaBacktracking(no) :
         noAux = noAux.getPai()
     return True
 
-def verificaMovimento(tabuleiroAtual, no):
-    i, j = buscaVazio(tabuleiroAtual)
-    tab = copy.deepcopy(tabuleiroAtual)
+def verificaCima(no):
+    i, j = buscaVazio(no.getTab())
+    tab = copy.deepcopy(no.getTab())
     global n
     check = False
     if(n > i + 1 and no.getfilhoCima() == None):
@@ -100,24 +100,35 @@ def verificaMovimento(tabuleiroAtual, no):
             tab[i][j] = '-'
         if check == True:
             no.setfilhoCima(noAux)
-            return noAux
+            return noAux, check
+    return no, check
 
-    #Direita
-    if(-1 < j - 1 and check == False and no.getfilhoDireita() == None):
+def verificaDireita( no):
+    i, j = buscaVazio(no.getTab())
+    tab = copy.deepcopy(no.getTab())
+    global n
+    check = False
+    if(-1 < j - 1 and no.getfilhoDireita() == None):
         tab[i][j] = tab[i][j-1]
         tab[i][j-1] = '-'
         aux = copy.deepcopy(tab)
         noAux = Node(no, aux)
         check = verificalistaBacktracking(noAux)
-
         if check == False:
             tab[i][j-1] = tab[i][j]
             tab[i][j] = '-'
         if check == True:
             no.setfilhoDireita(noAux)
-            return noAux
-    # Baixo
-    if(-1 < i - 1 and check == False and no.getfilhoBaixo() == None):
+            return noAux, check
+
+    return no, check
+
+def verificaBaixo(no):
+    i, j = buscaVazio(no.getTab())
+    tab = copy.deepcopy(no.getTab())
+    global n
+    check = False
+    if(-1 < i - 1 and no.getfilhoBaixo() == None):
         tab[i][j] = tab[i-1][j]
         tab[i-1][j] = '-'
         aux = copy.deepcopy(tab)
@@ -126,12 +137,19 @@ def verificaMovimento(tabuleiroAtual, no):
         if check == False:
             tab[i-1][j] = tab[i][j]
             tab[i][j] = '-'
+            return no, check
         if check == True:
             no.setfilhoBaixo(noAux)  
-            return noAux
+            return noAux, check
+    
+    return no, check
 
-    # Esquerda
-    if(n > j + 1 and check == False and no.getfilhoEsquerda() == None):
+def verificaEsquerda(no):
+    i, j = buscaVazio(no.getTab())
+    tab = copy.deepcopy(no.getTab())
+    global n
+    check = False
+    if(n > j + 1 and no.getfilhoEsquerda() == None):
         tab[i][j] = tab[i][j+1]
         tab[i][j+1] = '-'
         aux = copy.deepcopy(tab)
@@ -140,11 +158,12 @@ def verificaMovimento(tabuleiroAtual, no):
         if check == False:
             tab[i][j+1] = tab[i][j]
             tab[i][j] = '-'
+            return no, check
         if check == True:
             no.setfilhoEsquerda(noAux)
-            return noAux
+            return noAux, check 
 
-    return no.getPai()
+    return no, check
 
 
  
@@ -153,13 +172,25 @@ def backTracking (tabuleiroInicial, tabuleiroFinal):
     no = raiz
     sucesso = verificaObjetivo(no.getTab(), tabuleiroFinal)
     fracasso = False
+    check = False
     while (sucesso == False and fracasso == False):
-        no = verificaMovimento(no.getTab(), no)
-        if(no == None):
-            fracasso = True
-        else:
-            sucesso = verificaObjetivo(no.getTab(), tabuleiroFinal)
-        # print(no.getTab())
+
+        no, check = verificaCima(no)
+        if check == False:
+            no, check = verificaDireita(no)
+        if check == False:
+            no, check = verificaBaixo(no)
+        if check == False:
+            no, check = verificaEsquerda(no)
+        
+        if check == True:
+            sucesso = verificaObjetivo(no.getTab(),tabuleiroFinal)
+
+        elif check == False:
+            no = no.getPai()
+            if no == None:
+                fracasso = True
+
     print(sucesso)
     print(fracasso)
 
