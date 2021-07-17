@@ -1,7 +1,7 @@
 
 import copy
 
-n = 2
+n = 3
 
 class Node():
     def __init__(self, pai, tabuleiro):
@@ -12,10 +12,6 @@ class Node():
         self.pai = pai
         self.listBoolFilhos = [True,True,True,True]
         self.tabuleiro = tabuleiro
-    # def getId(self):
-    #     return self.id
-    # def getIdPai(self):
-    #     return self.idPai
     def getBoolFilhos(self):
         return self.listBoolFilhos
     def setBoolFilhos(self, id):
@@ -44,8 +40,6 @@ class Node():
         return self.pai
     def setPai(self, no):
         self.pai = no
-    # def getFechado(self):
-    #     return self.fechado
 
 # ordem Backtracking:
 # Cima 
@@ -53,29 +47,26 @@ class Node():
 # Baixo
 # Esquerda
 
-def imprimeArvore(no):
+def imprimeArvore(no,nivel):
     global n
     if (no != None):
+        print("Nível: " + str(nivel))
         for i in range(n):
             print(no.getTab()[i])
-        print("cima")
-        imprimeArvore(no.getfilhoCima())
-        print("direita")
-        imprimeArvore(no.getfilhoDireita())
-        print("baixo")
-        imprimeArvore(no.getfilhoBaixo())
-        print("esquerda")
-        imprimeArvore(no.getfilhoEsquerda())
+        print('Cima')
+        imprimeArvore(no.getfilhoCima(), nivel+1)
+        print('Direita')
+        imprimeArvore(no.getfilhoDireita(), nivel+1)
+        print('Baixo')
+        imprimeArvore(no.getfilhoBaixo(), nivel+1)
+        print('Esquerda') 
+        imprimeArvore(no.getfilhoEsquerda(), nivel+1)
 
 def buscaVazio(tabuleiroAtual):
     global n
     for i in range (n):
         for j in range (n):
             if tabuleiroAtual[i][j] == '-':
-                print(i)
-                print(j)
-                for x in range(n):
-                    print(tabuleiroAtual[x])
                 return i,j
 
 def verificaObjetivo(tabuleiroAtual, tabuleiroFinal):
@@ -83,110 +74,109 @@ def verificaObjetivo(tabuleiroAtual, tabuleiroFinal):
         return False
     return True
 
-def verificalistaBacktracking(noAtual) :
+def verificalistaBacktracking(no) :
     global n
-    noAux = noAtual.getPai()
+    noAux = no.getPai()
     boolean = False
     while(noAux != None):
-        if noAux.getTab() == noAtual.getTab():
+        if noAux.getTab() == no.getTab():
             return False
         noAux = noAux.getPai()
     return True
 
-def verificaMovimento(tabuleiroAtual, i, j, no):
+def verificaMovimento(tabuleiroAtual, no):
+    i, j = buscaVazio(tabuleiroAtual)
+    tab = copy.deepcopy(tabuleiroAtual)
     global n
     check = False
-    checkSide = ''
-    #cima
     if(n > i + 1 and no.getfilhoCima() == None):
-        tabuleiroAtual[i][j] = tabuleiroAtual[i+1][j]
-        tabuleiroAtual[i+1][j] = '-'
-        aux = copy.deepcopy(tabuleiroAtual)
-        noAux = Node(no, aux)
-        check  = verificalistaBacktracking(noAux)
-        if check == False:
-            tabuleiroAtual[i+1][j] = tabuleiroAtual[i][j]
-            tabuleiroAtual[i][j] = '-'
-            noAux = Node(no, tabuleiroAtual)
-        checkSide = 'cima'
-    #Direita
-    if(-1 < j - 1 and check == False and no.getfilhoDireita() == None):
-        tabuleiroAtual[i][j] = tabuleiroAtual[i][j-1]
-        tabuleiroAtual[i][j-1] = '-'
-        aux = copy.deepcopy(tabuleiroAtual)
-        noAux = Node(no, aux)
-        check  = verificalistaBacktracking(noAux)
-        if check == False:
-            tabuleiroAtual[i][j-1] = tabuleiroAtual[i][j]
-            tabuleiroAtual[i][j] = '-'
-            noAux = Node(no, aux)
-        checkSide = 'direita'
-    # Baixo
-    if(-1 < i - 1 and check == False and no.getfilhoBaixo() == None):
-        tabuleiroAtual[i][j] = tabuleiroAtual[i-1][j]
-        tabuleiroAtual[i-1][j] = '-'
-        aux = copy.deepcopy(tabuleiroAtual)
+        tab[i][j] = tab[i+1][j]
+        tab[i+1][j] = '-'
+        aux = copy.deepcopy(tab)
         noAux = Node(no, aux)
         check = verificalistaBacktracking(noAux)
         if check == False:
-            tabuleiroAtual[i-1][j] = tabuleiroAtual[i][j]
-            tabuleiroAtual[i][j] = '-'
-        checkSide = 'baixo'    
+            tab[i+1][j] = tab[i][j]
+            tab[i][j] = '-'
+        if check == True:
+            no.setfilhoCima(noAux)
+            return noAux
+
+    #Direita
+    if(-1 < j - 1 and check == False and no.getfilhoDireita() == None):
+        tab[i][j] = tab[i][j-1]
+        tab[i][j-1] = '-'
+        aux = copy.deepcopy(tab)
+        noAux = Node(no, aux)
+        check = verificalistaBacktracking(noAux)
+
+        if check == False:
+            tab[i][j-1] = tab[i][j]
+            tab[i][j] = '-'
+        if check == True:
+            no.setfilhoDireita(noAux)
+            return noAux
+    # Baixo
+    if(-1 < i - 1 and check == False and no.getfilhoBaixo() == None):
+        tab[i][j] = tab[i-1][j]
+        tab[i-1][j] = '-'
+        aux = copy.deepcopy(tab)
+        noAux = Node(no, aux)
+        check = verificalistaBacktracking(noAux)
+        if check == False:
+            tab[i-1][j] = tab[i][j]
+            tab[i][j] = '-'
+        if check == True:
+            no.setfilhoBaixo(noAux)  
+            return noAux
+
     # Esquerda
     if(n > j + 1 and check == False and no.getfilhoEsquerda() == None):
-        tabuleiroAtual[i][j] = tabuleiroAtual[i][j+1]
-        tabuleiroAtual[i][j+1] = '-'
-        aux = copy.deepcopy(tabuleiroAtual)
+        tab[i][j] = tab[i][j+1]
+        tab[i][j+1] = '-'
+        aux = copy.deepcopy(tab)
         noAux = Node(no, aux)
         check  = verificalistaBacktracking(noAux)
         if check == False:
-            tabuleiroAtual = aux
-            noAux = Node(no, aux)
-        checkSide = 'esquerda'
-
-
-    if check == True:
-        if checkSide == 'cima':
-            no.setfilhoCima(noAux)
-        if checkSide == 'direita':
-            no.setfilhoDireita(noAux)
-        if checkSide == 'baixo':
-            no.setfilhoBaixo(noAux)
-        if checkSide == 'esquerda':
+            tab[i][j+1] = tab[i][j]
+            tab[i][j] = '-'
+        if check == True:
             no.setfilhoEsquerda(noAux)
+            return noAux
 
-    if check == False:
-        noAux = no.getPai()
-        # print('ENTREI')
+    return no.getPai()
 
-    # print(noAux)
-    # print(noAux.getPai())
-    # print(noAux.getfilhoCima())
-    # print(noAux.getfilhoDireita())
-    # print(noAux.getfilhoBaixo())
-    # print(noAux.getfilhoEsquerda())
-    # for i in range(n):
-    #         print(no.getTab()[i])
-    return noAux
+
  
 def backTracking (tabuleiroInicial, tabuleiroFinal):
     raiz = Node(None, copy.deepcopy(tabuleiroInicial))
     no = raiz
-    tabuleiroAtual = copy.deepcopy(tabuleiroInicial)
     sucesso = verificaObjetivo(no.getTab(), tabuleiroFinal)
     fracasso = False
-    i = 0
-    while (sucesso == False and fracasso == False and i < 14):
-        linha, coluna = buscaVazio(tabuleiroAtual)
-        no = verificaMovimento(tabuleiroAtual, linha, coluna, no)
+    while (sucesso == False and fracasso == False):
+        no = verificaMovimento(no.getTab(), no)
         if(no == None):
             fracasso = True
         else:
             sucesso = verificaObjetivo(no.getTab(), tabuleiroFinal)
-        i += 1
-    # print(sucesso)
-    # print(fracasso)
-    # imprimeArvore(raiz)
+        # print(no.getTab())
+    print(sucesso)
+    print(fracasso)
+
+def getInvCount(arr):
+    inv_count = 0
+    i=0
+    for i in range(9 -1):
+        j = i + 1
+        for j in range(9):
+             if (arr[j] and arr[i] and arr[i] > arr[j]):
+                  inv_count += 1
+    return inv_count
+
+def isSolvable(puzzle):
+    invCount = getInvCount(int(puzzle))
+ 
+    return (invCount%2 == 0)
 
 def main():
     global n
