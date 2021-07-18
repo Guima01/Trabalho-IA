@@ -126,21 +126,18 @@ def buscaProfundidade(tabuleiroInicial, tabuleiroFinal):
             else:
                 aux, check = verificaCima(no)
                 if check == True:
-                    # print('cima')
                     abertos.put(copy.deepcopy(aux))
                 aux, check = verificaDireita(no)
                 if check == True:
-                    # print('direita')
                     abertos.put(copy.deepcopy(aux))
                 aux, check = verificaBaixo(no)
                 if check == True:
-                    # print('baixo')
                     abertos.put(copy.deepcopy(aux))
                 aux, check = verificaEsquerda(no)
                 if check == True:
-                    # print('esquerda')
                     abertos.put(copy.deepcopy(aux))
 
                 fechados.append(no)
+                print(no.getTab())
     print(sucesso)
     print(fracasso)
