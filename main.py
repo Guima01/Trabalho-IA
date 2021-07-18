@@ -169,15 +169,9 @@ def main():
         tabuleiroFinal.append([])
         for j in range (n):
             tabuleiroFinal[i].append(input())
-    # for i in range (3):
-    #     for j in range (3):
-    #         print(tabuleiroInicial[i][j])
-    # for i in range (3):
-    #     for j in range (3):
-    #         print(tabuleiroFinal[i][j])
 
     # backTracking(tabuleiroInicial, tabuleiroFinal)
     # buscaLargura(tabuleiroInicial, tabuleiroFinal)
-    buscaProfundidade(tabuleiroInicial, tabuleiroFinal)
+    # buscaProfundidade(tabuleiroInicial, tabuleiroFinal)
 
 main()

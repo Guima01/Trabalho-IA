@@ -7,6 +7,7 @@ sys.setrecursionlimit(1000000000)
 
 
 fechados = []
+abertos = LifoQueue()
 n = 3
 
 def verificaObjetivo(tabuleiroAtual, tabuleiroFinal):
@@ -32,9 +33,10 @@ def verificaRepeticao(no) :
 def verificaCima(no):
     i, j = buscaVazio(no.getTab())
     tab = copy.deepcopy(no.getTab())
+    global abertos
     global n
     check = False
-    if(n > i + 1 and no.getfilhoCima() == None):
+    if(n > i + 1):
         tab[i][j] = tab[i+1][j]
         tab[i+1][j] = '-'
         aux = copy.deepcopy(tab)
@@ -44,16 +46,19 @@ def verificaCima(no):
             tab[i+1][j] = tab[i][j]
             tab[i][j] = '-'
         if check == True:
-            no.setfilhoCima(noAux)
+            # no.setfilhoCima(noAux)
+            abertos.put(noAux)
             return noAux, check
+    
     return no, check
 
 def verificaDireita( no):
     i, j = buscaVazio(no.getTab())
     tab = copy.deepcopy(no.getTab())
+    global abertos
     global n
     check = False
-    if(-1 < j - 1 and no.getfilhoDireita() == None):
+    if(-1 < j - 1):
         tab[i][j] = tab[i][j-1]
         tab[i][j-1] = '-'
         aux = copy.deepcopy(tab)
@@ -63,17 +68,19 @@ def verificaDireita( no):
             tab[i][j-1] = tab[i][j]
             tab[i][j] = '-'
         if check == True:
-            no.setfilhoDireita(noAux)
-            return noAux, check
+            # no.setfilhoDireita(noAux)
+            abertos.put(noAux)           
+            return noAux
 
-    return no, check
+    return no
 
 def verificaBaixo(no):
     i, j = buscaVazio(no.getTab())
     tab = copy.deepcopy(no.getTab())
+    global abertos
     global n
     check = False
-    if(-1 < i - 1 and no.getfilhoBaixo() == None):
+    if(-1 < i - 1):
         tab[i][j] = tab[i-1][j]
         tab[i-1][j] = '-'
         aux = copy.deepcopy(tab)
@@ -83,17 +90,19 @@ def verificaBaixo(no):
             tab[i-1][j] = tab[i][j]
             tab[i][j] = '-'
         if check == True:
-            no.setfilhoBaixo(noAux)  
-            return noAux, check
+            # no.setfilhoBaixo(noAux)  
+            abertos.put(noAux) 
+            return noAux
     
-    return no, check
+    return no
 
 def verificaEsquerda(no):
+    global abertos
     i, j = buscaVazio(no.getTab())
     tab = copy.deepcopy(no.getTab())
     global n
     check = False
-    if(n > j + 1 and no.getfilhoEsquerda() == None):
+    if(n > j + 1):
         tab[i][j] = tab[i][j+1]
         tab[i][j+1] = '-'
         aux = copy.deepcopy(tab)
@@ -103,15 +112,16 @@ def verificaEsquerda(no):
             tab[i][j+1] = tab[i][j]
             tab[i][j] = '-'
         if check == True:
-            no.setfilhoEsquerda(noAux)
-            return noAux, check 
+            # no.setfilhoEsquerda(noAux)
+            abertos.put(noAux)
+            return noAux
 
-    return no, check
+    return no
 
 def buscaProfundidade(tabuleiroInicial, tabuleiroFinal):
-    abertos = LifoQueue()
+    global abertos
     global fechados
-    raiz = Node(None, copy.deepcopy(tabuleiroInicial))
+    raiz = Node(None, tabuleiroInicial)
     sucesso = verificaObjetivo(raiz.getTab(), tabuleiroFinal)
     abertos.put(copy.deepcopy(raiz))
     fracasso = False
@@ -124,20 +134,11 @@ def buscaProfundidade(tabuleiroInicial, tabuleiroFinal):
             if verificaObjetivo(no.getTab(),tabuleiroFinal):
                 sucesso = True
             else:
-                aux, check = verificaCima(no)
-                if check == True:
-                    abertos.put(copy.deepcopy(aux))
-                aux, check = verificaDireita(no)
-                if check == True:
-                    abertos.put(copy.deepcopy(aux))
-                aux, check = verificaBaixo(no)
-                if check == True:
-                    abertos.put(copy.deepcopy(aux))
-                aux, check = verificaEsquerda(no)
-                if check == True:
-                    abertos.put(copy.deepcopy(aux))
+                aux = verificaCima(no)
+                aux = verificaDireita(no)
+                aux = verificaBaixo(no)
+                aux = verificaEsquerda(no)
 
                 fechados.append(no)
-                print(no.getTab())
     print(sucesso)
     print(fracasso)
