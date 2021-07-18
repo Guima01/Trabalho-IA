@@ -137,7 +137,6 @@ def verificaBaixo(no):
         if check == False:
             tab[i-1][j] = tab[i][j]
             tab[i][j] = '-'
-            return no, check
         if check == True:
             no.setfilhoBaixo(noAux)  
             return noAux, check
@@ -158,15 +157,12 @@ def verificaEsquerda(no):
         if check == False:
             tab[i][j+1] = tab[i][j]
             tab[i][j] = '-'
-            return no, check
         if check == True:
             no.setfilhoEsquerda(noAux)
             return noAux, check 
 
     return no, check
 
-
- 
 def backTracking (tabuleiroInicial, tabuleiroFinal):
     raiz = Node(None, copy.deepcopy(tabuleiroInicial))
     no = raiz
@@ -182,7 +178,6 @@ def backTracking (tabuleiroInicial, tabuleiroFinal):
             no, check = verificaBaixo(no)
         if check == False:
             no, check = verificaEsquerda(no)
-        
         if check == True:
             sucesso = verificaObjetivo(no.getTab(),tabuleiroFinal)
 
@@ -190,29 +185,15 @@ def backTracking (tabuleiroInicial, tabuleiroFinal):
             no = no.getPai()
             if no == None:
                 fracasso = True
-
+        # print(no.getTab())
     print(sucesso)
     print(fracasso)
-
-def getInvCount(arr):
-    inv_count = 0
-    i=0
-    for i in range(9 -1):
-        j = i + 1
-        for j in range(9):
-             if (arr[j] and arr[i] and arr[i] > arr[j]):
-                  inv_count += 1
-    return inv_count
-
-def isSolvable(puzzle):
-    invCount = getInvCount(int(puzzle))
- 
-    return (invCount%2 == 0)
 
 def main():
     global n
     tabuleiroInicial = []
     tabuleiroFinal = []
+    print("Digite o estado Inicial da tabela")
     for i in range (n):
         tabuleiroInicial.append([])
         for j in range (n):
