@@ -2,12 +2,12 @@ from Node import *
 import copy
 from queue import Queue
 
-n = 3
+n = 0
+m = 0
 fechados = []
 abertos = Queue()
 
 def imprimeArvore(no,nivel):
-    global n
     if (no != None):
         print("Nível: " + str(nivel))
         for i in range(n):
@@ -23,8 +23,9 @@ def imprimeArvore(no,nivel):
 
 def buscaVazio(tabuleiroAtual):
     global n
+    global m
     for i in range (n):
-        for j in range (n):
+        for j in range (m):
             if tabuleiroAtual[i][j] == '-':
                 return i,j
 
@@ -34,7 +35,6 @@ def verificaObjetivo(tabuleiroAtual, tabuleiroFinal):
     return True
 
 def verificalistaBacktracking(no) :
-    global n
     noAux = no.getPai()
     boolean = False
     while(noAux != None):
@@ -47,6 +47,7 @@ def verificaCima(no):
     i, j = buscaVazio(no.getTab())
     tab = copy.deepcopy(no.getTab())
     global n
+    global m
     check = False
     if(n > i + 1 and no.getfilhoCima() == None):
         tab[i][j] = tab[i+1][j]
@@ -65,7 +66,6 @@ def verificaCima(no):
 def verificaDireita( no):
     i, j = buscaVazio(no.getTab())
     tab = copy.deepcopy(no.getTab())
-    global n
     check = False
     if(-1 < j - 1 and no.getfilhoDireita() == None):
         tab[i][j] = tab[i][j-1]
@@ -85,7 +85,6 @@ def verificaDireita( no):
 def verificaBaixo(no):
     i, j = buscaVazio(no.getTab())
     tab = copy.deepcopy(no.getTab())
-    global n
     check = False
     if(-1 < i - 1 and no.getfilhoBaixo() == None):
         tab[i][j] = tab[i-1][j]
@@ -106,8 +105,9 @@ def verificaEsquerda(no):
     i, j = buscaVazio(no.getTab())
     tab = copy.deepcopy(no.getTab())
     global n
+    global m
     check = False
-    if(n > j + 1 and no.getfilhoEsquerda() == None):
+    if(m > j + 1 and no.getfilhoEsquerda() == None):
         tab[i][j] = tab[i][j+1]
         tab[i][j+1] = '-'
         aux = copy.deepcopy(tab)
@@ -122,7 +122,11 @@ def verificaEsquerda(no):
 
     return no, check
 
-def backTracking (tabuleiroInicial, tabuleiroFinal):
+def backTracking (tabuleiroInicial, tabuleiroFinal, linha, coluna):
+    global n
+    global m 
+    n = linha
+    m = coluna   
     raiz = Node(None, copy.deepcopy(tabuleiroInicial))
     no = raiz
     sucesso = verificaObjetivo(no.getTab(), tabuleiroFinal)

@@ -2,7 +2,8 @@ from Node import *
 import copy
 from queue import Queue
 
-n = 3
+n = 0
+m = 0
 fechados = []
 abertos = Queue()
 

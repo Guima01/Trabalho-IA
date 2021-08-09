@@ -6,7 +6,8 @@ import sys
 
 fechados = []
 abertos = LifoQueue()
-n = 3
+n = 0
+m = 0
 
 def verificaObjetivo(tabuleiroAtual, tabuleiroFinal):
     if tabuleiroAtual != tabuleiroFinal: 
