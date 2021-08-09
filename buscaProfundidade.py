@@ -3,8 +3,6 @@ import copy
 from queue import LifoQueue
 
 import sys
-sys.setrecursionlimit(1000000000)
-
 
 fechados = []
 abertos = LifoQueue()
