@@ -5,12 +5,8 @@ class Node():
         self.filhoBaixo = None
         self.filhoEsquerda = None
         self.pai = pai
-        self.listBoolFilhos = [True,True,True,True]
         self.tabuleiro = tabuleiro
-    def getBoolFilhos(self):
-        return self.listBoolFilhos
-    def setBoolFilhos(self, id):
-        self.listBoolFilhos[id] = False
+        self.custo = 0
     def setTab(self, tab):
         self.tabuleiro = tab
     def getTab(self):
@@ -35,3 +31,7 @@ class Node():
         return self.pai
     def setPai(self, no):
         self.pai = no
+    def setCusto(self, custo):
+        self.custo = custo
+    def getCusto(self):
+        return self.custo

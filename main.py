@@ -37,7 +37,7 @@ def main():
         for j in range (m):
             tabuleiroFinal[i].append(input())
 
-    backTracking(tabuleiroInicial, tabuleiroFinal, n, m)
+    # backTracking(tabuleiroInicial, tabuleiroFinal, n, m)
     # buscaLargura(tabuleiroInicial, tabuleiroFinal, n, m)
     # buscaProfundidade(tabuleiroInicial, tabuleiroFinal, n, m)
 

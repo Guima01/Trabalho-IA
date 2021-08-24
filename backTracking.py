@@ -52,12 +52,8 @@ def verificaCima(no):
     if(n > i + 1 and no.getfilhoCima() == None):
         tab[i][j] = tab[i+1][j]
         tab[i+1][j] = '-'
-        aux = copy.deepcopy(tab)
-        noAux = Node(no, aux)
+        noAux = Node(no, tab)
         check = verificalistaBacktracking(noAux)
-        if check == False:
-            tab[i+1][j] = tab[i][j]
-            tab[i][j] = '-'
         if check == True:
             no.setfilhoCima(noAux)
             return noAux, check
@@ -70,12 +66,8 @@ def verificaDireita( no):
     if(-1 < j - 1 and no.getfilhoDireita() == None):
         tab[i][j] = tab[i][j-1]
         tab[i][j-1] = '-'
-        aux = copy.deepcopy(tab)
-        noAux = Node(no, aux)
+        noAux = Node(no, tab)
         check = verificalistaBacktracking(noAux)
-        if check == False:
-            tab[i][j-1] = tab[i][j]
-            tab[i][j] = '-'
         if check == True:
             no.setfilhoDireita(noAux)
             return noAux, check
@@ -89,12 +81,8 @@ def verificaBaixo(no):
     if(-1 < i - 1 and no.getfilhoBaixo() == None):
         tab[i][j] = tab[i-1][j]
         tab[i-1][j] = '-'
-        aux = copy.deepcopy(tab)
-        noAux = Node(no, aux)
+        noAux = Node(no, tab)
         check = verificalistaBacktracking(noAux)
-        if check == False:
-            tab[i-1][j] = tab[i][j]
-            tab[i][j] = '-'
         if check == True:
             no.setfilhoBaixo(noAux)  
             return noAux, check
@@ -110,12 +98,8 @@ def verificaEsquerda(no):
     if(m > j + 1 and no.getfilhoEsquerda() == None):
         tab[i][j] = tab[i][j+1]
         tab[i][j+1] = '-'
-        aux = copy.deepcopy(tab)
-        noAux = Node(no, aux)
+        noAux = Node(no, tab)
         check  = verificalistaBacktracking(noAux)
-        if check == False:
-            tab[i][j+1] = tab[i][j]
-            tab[i][j] = '-'
         if check == True:
             no.setfilhoEsquerda(noAux)
             return noAux, check 
@@ -149,5 +133,7 @@ def backTracking (tabuleiroInicial, tabuleiroFinal, linha, coluna):
             if no == None:
                 fracasso = True
         # print(no.getTab())
-    print(sucesso)
-    print(fracasso)
+    if sucesso == True:
+        print('Sucesso')
+    else: 
+        print('Fracasso')
