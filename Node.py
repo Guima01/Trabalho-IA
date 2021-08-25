@@ -7,6 +7,7 @@ class Node():
         self.pai = pai
         self.tabuleiro = tabuleiro
         self.custo = 0
+        self.custoGuloso = 0
     def setTab(self, tab):
         self.tabuleiro = tab
     def getTab(self):
@@ -35,3 +36,7 @@ class Node():
         self.custo = custo
     def getCusto(self):
         return self.custo
+    def setCustoGuloso(self, custo):
+        self.custoGuloso = custo
+    def getCustoGuloso(self):
+        return self.custoGuloso
