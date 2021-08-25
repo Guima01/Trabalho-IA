@@ -116,6 +116,7 @@ def buscaLargura(tabuleiroInicial, tabuleiroFinal, linha, coluna):
                 verificaDireita(no)
                 verificaBaixo(no)
                 verificaEsquerda(no)
+            print(no.getTab())
 
     if sucesso == True:
         print('Sucesso')

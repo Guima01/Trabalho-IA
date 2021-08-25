@@ -3,6 +3,7 @@ from Node import *
 from buscaLargura import *
 from buscaProfundidade import *
 from backTracking import *
+from buscaOrdenada import *
 
 n = 0 # linha
 m = 0 #coluna
@@ -38,7 +39,8 @@ def main():
             tabuleiroFinal[i].append(input())
 
     # backTracking(tabuleiroInicial, tabuleiroFinal, n, m)
-    # buscaLargura(tabuleiroInicial, tabuleiroFinal, n, m)
+    buscaLargura(tabuleiroInicial, tabuleiroFinal, n, m)
     # buscaProfundidade(tabuleiroInicial, tabuleiroFinal, n, m)
+    # buscaOrdenada(tabuleiroInicial, tabuleiroFinal, n, m)
 
 main()
