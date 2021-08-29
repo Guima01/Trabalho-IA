@@ -157,6 +157,7 @@ def buscaGulosa(tabuleiroInicial, tabuleiroFinal, linha, coluna):
     sucesso = False
     fracasso = False
     check = False
+    noResult = None
     while(sucesso == False and fracasso == False):
         if len(abertos) == 0:
             fracasso = True
@@ -173,6 +174,7 @@ def buscaGulosa(tabuleiroInicial, tabuleiroFinal, linha, coluna):
                     break
             fechados.append(no)
             if verificaObjetivo(no.getTab(),tabuleiroFinal):
+                noResult = no
                 sucesso = True
             else:
                 verificaCima(no)
@@ -184,6 +186,7 @@ def buscaGulosa(tabuleiroInicial, tabuleiroFinal, linha, coluna):
     nos_visitados = len(fechados)
     nos_expandidos = len(abertos) + nos_visitados
     print('Tempo de execução: ' + str(time_end - time_init))
+    print('Custo Solução:' + str(noResult.getCustoGuloso()))
     print('Nos visitados: ' + str(nos_visitados))
     print('Nos expandidos: ' + str(nos_expandidos))
     print('Profundidade:' + str(profundidade))
