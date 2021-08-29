@@ -5,6 +5,7 @@ from queue import LifoQueue
 
 import sys
 
+caminho = []
 fechados = []
 abertos = LifoQueue()
 profundidade = 0
@@ -23,6 +24,16 @@ def buscaVazio(tabuleiroAtual):
         for j in range (m):
             if tabuleiroAtual[i][j] == '-':
                 return i,j
+
+def retornaCaminho(no):
+    global caminho
+    caminho.append(no)
+    noAux = no.getPai()
+    boolean = False
+    while(noAux != None):
+        caminho.append(noAux)
+        noAux = noAux.getPai()
+    caminho.reverse()
 
 def verificaRepeticao(no) :
     global n
@@ -51,7 +62,6 @@ def verificaCima(no):
                 profundidade = noAux.getCusto()
             abertos.put(noAux)
     
-
 def verificaDireita( no):
     i, j = buscaVazio(no.getTab())
     tab = copy.deepcopy(no.getTab())
@@ -69,7 +79,6 @@ def verificaDireita( no):
             if profundidade < noAux.getCusto():
                 profundidade = noAux.getCusto()
             abertos.put(noAux)           
-
 
 def verificaBaixo(no):
     i, j = buscaVazio(no.getTab())
@@ -89,7 +98,6 @@ def verificaBaixo(no):
                 profundidade = noAux.getCusto()
             abertos.put(noAux) 
     
-
 def verificaEsquerda(no):
     i, j = buscaVazio(no.getTab())
     tab = copy.deepcopy(no.getTab())
@@ -129,12 +137,14 @@ def buscaProfundidade(tabuleiroInicial, tabuleiroFinal, linha, coluna):
     abertos.put(copy.deepcopy(raiz))
     fracasso = False
     check = False
+    noResult = None
     while(sucesso == False and fracasso == False):
         if abertos.empty():
             fracasso = True
         else:
             no = abertos.get()
             if verificaObjetivo(no.getTab(),tabuleiroFinal):
+                noResult = no
                 sucesso = True
             else:
                 verificaEsquerda(no)
@@ -143,13 +153,16 @@ def buscaProfundidade(tabuleiroInicial, tabuleiroFinal, linha, coluna):
                 verificaCima(no)
                 fechados.append(no)
     time_end = time.time()
-    nos_visitados = len(fechados)
-    nos_expandidos = abertos.qsize() + nos_visitados
     print('Tempo de execução: ' + str(time_end - time_init))
-    print('Nos visitados: ' + str(nos_visitados))
-    print('Nos expandidos: ' + str(nos_expandidos))
-    print('Profundidade:' + str(profundidade))
     if sucesso == True:
-        print('Sucesso')
+        retornaCaminho(noResult)
+        nos_visitados = len(fechados)
+        nos_expandidos = abertos.qsize() + nos_visitados
+        print('Nos visitados: ' + str(nos_visitados))
+        print('Nos expandidos: ' + str(nos_expandidos))
+        print('Profundidade:' + str(profundidade))
+        # print('Caminho:')
+        # for aux in caminho:
+        #     print(aux.getTab())
     else: 
         print('Fracasso')

@@ -7,6 +7,7 @@ n = 0
 m = 0
 profundidade = 0
 profundidadeAux = 0
+caminho = []
 fechados = []
 abertos = Queue()
 
@@ -45,6 +46,16 @@ def verificalistaBacktracking(no) :
             return False
         noAux = noAux.getPai()
     return True
+
+def retornaCaminho(no):
+    global caminho
+    caminho.append(no)
+    noAux = no.getPai()
+    boolean = False
+    while(noAux != None):
+        caminho.append(noAux)
+        noAux = noAux.getPai()
+    caminho.reverse()
 
 def verificaCima(no):
     i, j = buscaVazio(no.getTab())
@@ -148,12 +159,15 @@ def backTracking (tabuleiroInicial, tabuleiroFinal, linha, coluna):
                 fracasso = True
         # print(no.getTab())
     time_end = time.time()
-    nos_expandidos = nos_visitados - 1
-    print('Tempo de execução: ' + str(time_end - time_init))
-    print('Nos visitados: ' + str(nos_visitados))
-    print('Nos expandidos: ' + str(nos_expandidos))
-    print('Profundidade:' + str(profundidade))
     if sucesso == True:
-        print('Sucesso')
+        retornaCaminho(no)
+        nos_expandidos = nos_visitados - 1
+        print('Tempo de execução: ' + str(time_end - time_init))
+        print('Nos visitados: ' + str(nos_visitados))
+        print('Nos expandidos: ' + str(nos_expandidos))
+        print('Profundidade:' + str(profundidade))
+        # print('Caminho:')
+        # for aux in caminho:
+        #     print(aux.getTab())
     else: 
         print('Fracasso')

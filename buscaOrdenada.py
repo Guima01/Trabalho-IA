@@ -6,6 +6,7 @@ from queue import Queue
 n = 0
 m = 0
 profundidade = 0
+caminho = []
 fechados = []
 abertos = []
 
@@ -30,6 +31,16 @@ def verificaRepeticao(no) :
             return False
     return True
 
+def retornaCaminho(no):
+    global caminho
+    caminho.append(no)
+    noAux = no.getPai()
+    boolean = False
+    while(noAux != None):
+        caminho.append(noAux)
+        noAux = noAux.getPai()
+    caminho.reverse()
+
 def verificaCima(no):
     i, j = buscaVazio(no.getTab())   # Busca a posição do -
     tab = copy.deepcopy(no.getTab())  #cria uma copia do tabuleiro atual
@@ -49,7 +60,6 @@ def verificaCima(no):
                 profundidade = noAux.getCusto()
             abertos.append(noAux)    #Adiciona ele na lista de abertos
     
-
 def verificaDireita( no):
     i, j = buscaVazio(no.getTab())
     tab = copy.deepcopy(no.getTab())
@@ -67,7 +77,6 @@ def verificaDireita( no):
             if profundidade < noAux.getCusto():
                 profundidade = noAux.getCusto()
             abertos.append(noAux)           
-
 
 def verificaBaixo(no):
     i, j = buscaVazio(no.getTab()) 
@@ -87,7 +96,6 @@ def verificaBaixo(no):
                 profundidade = noAux.getCusto()
             abertos.append(noAux) 
     
-
 def verificaEsquerda(no):
     global abertos
     i, j = buscaVazio(no.getTab())
@@ -154,14 +162,18 @@ def buscaOrdenada(tabuleiroInicial, tabuleiroFinal, linha, coluna):
                 verificaEsquerda(no)
             # print(no.getTab())
     time_end = time.time()
-    nos_visitados = len(fechados)
-    nos_expandidos = len(abertos) + nos_visitados
     print('Tempo de execução: ' + str(time_end - time_init))
-    print('Custo Solução:' + str(noResult.getCusto()))
-    print('Nos visitados: ' + str(nos_visitados))
-    print('Nos expandidos: ' + str(nos_expandidos))
-    print('Profundidade:' + str(profundidade))
     if sucesso == True:
-        print('Sucesso')
+        retornaCaminho(noResult)
+        nos_visitados = len(fechados)
+        nos_expandidos = len(abertos) + nos_visitados
+        print('Tempo de execução: ' + str(time_end - time_init))
+        print('Custo Solução:' + str(noResult.getCusto()))
+        print('Nos visitados: ' + str(nos_visitados))
+        print('Nos expandidos: ' + str(nos_expandidos))
+        print('Profundidade:' + str(profundidade))
+        # print('Caminho:')
+        # for aux in caminho:
+        #     print(aux.getTab())
     else: 
         print('Fracasso')

@@ -6,6 +6,7 @@ from queue import Queue
 n = 0
 m = 0
 profundidade = 0
+caminho = []
 fechados = []
 abertos = []
 tabFinal = []
@@ -14,6 +15,16 @@ def verificaObjetivo(tabuleiroAtual, tabuleiroFinal):
     if tabuleiroAtual != tabuleiroFinal: 
         return False
     return True
+
+def retornaCaminho(no):
+    global caminho
+    caminho.append(no)
+    noAux = no.getPai()
+    boolean = False
+    while(noAux != None):
+        caminho.append(noAux)
+        noAux = noAux.getPai()
+    caminho.reverse()
 
 def buscaVazio(tabuleiroAtual):
     global n
@@ -183,14 +194,17 @@ def buscaGulosa(tabuleiroInicial, tabuleiroFinal, linha, coluna):
                 verificaEsquerda(no)
 
     time_end = time.time()
-    nos_visitados = len(fechados)
-    nos_expandidos = len(abertos) + nos_visitados
     print('Tempo de execução: ' + str(time_end - time_init))
-    print('Custo Solução:' + str(noResult.getCustoGuloso()))
-    print('Nos visitados: ' + str(nos_visitados))
-    print('Nos expandidos: ' + str(nos_expandidos))
-    print('Profundidade:' + str(profundidade))
     if sucesso == True:
-        print('Sucesso')
+        retornaCaminho(noResult)
+        nos_visitados = len(fechados)
+        nos_expandidos = len(abertos) + nos_visitados
+        print('Custo Solução:' + str(noResult.getCustoGuloso()))
+        print('Nos visitados: ' + str(nos_visitados))
+        print('Nos expandidos: ' + str(nos_expandidos))
+        print('Profundidade:' + str(profundidade))
+        # print('Caminho:')
+        # for aux in caminho:
+        #     print(aux.getTab())
     else: 
         print('Fracasso')
