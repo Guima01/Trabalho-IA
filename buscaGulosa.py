@@ -1,9 +1,11 @@
 from Node import *
 import copy
+import time
 from queue import Queue
 
 n = 0
 m = 0
+profundidade = 0
 fechados = []
 abertos = []
 tabFinal = []
@@ -57,15 +59,19 @@ def verificaCima(no):
     global abertos 
     global n
     global tabFinal
+    global profundidade
     check = False  #booleano de checagem
     if(n > i + 1):  #Verifica se é possível a peça se mover
         tab[i][j] = tab[i+1][j]         #Faz as mudanças no tabuleiro
         tab[i+1][j] = '-'
         noAux = Node(no, tab)               #Cria nó auxiliar
         noAux.setCustoGuloso(calcManhatann(noAux.getTab(),tabFinal))
+        noAux.setCusto(no.getCusto() + 1)
         check = verificaRepeticao(noAux)    #verifica se o tabuleiro do nó filho ja esta na lista de fechados
         if check == True:       #Se sim
             no.setfilhoCima(noAux)    #seta ele como filho
+            if profundidade < noAux.getCusto():
+                profundidade = noAux.getCusto()
             abertos.append(noAux)    #Adiciona ele na lista de abertos
     
 def verificaDireita( no):
@@ -73,15 +79,19 @@ def verificaDireita( no):
     tab = copy.deepcopy(no.getTab())
     global abertos
     global tabFinal
+    global profundidade
     check = False
     if(-1 < j - 1):
         tab[i][j] = tab[i][j-1]
         tab[i][j-1] = '-'
         noAux = Node(no, tab)
         noAux.setCustoGuloso(calcManhatann(noAux.getTab(),tabFinal))
+        noAux.setCusto(no.getCusto() + 1)
         check = verificaRepeticao(noAux)
         if check == True:
             no.setfilhoDireita(noAux)
+            if profundidade < noAux.getCusto():
+                profundidade = noAux.getCusto()
             abertos.append(noAux)           
 
 def verificaBaixo(no):
@@ -89,15 +99,19 @@ def verificaBaixo(no):
     tab = copy.deepcopy(no.getTab())
     global abertos
     global tabFinal
+    global profundidade
     check = False
     if(-1 < i - 1):
         tab[i][j] = tab[i-1][j]
         tab[i-1][j] = '-'
         noAux = Node(no, tab)
         noAux.setCustoGuloso(calcManhatann(noAux.getTab(),tabFinal))
+        noAux.setCusto(no.getCusto() + 1)
         check = verificaRepeticao(noAux)
         if check == True:
             no.setfilhoBaixo(noAux)  
+            if profundidade < noAux.getCusto():
+                profundidade = noAux.getCusto()
             abertos.append(noAux) 
     
 def verificaEsquerda(no):
@@ -107,18 +121,27 @@ def verificaEsquerda(no):
     global n
     global m
     global tabFinal
+    global profundidade
     check = False
     if(m > j + 1):
         tab[i][j] = tab[i][j+1]
         tab[i][j+1] = '-'
         noAux = Node(no, tab)
         noAux.setCustoGuloso(calcManhatann(noAux.getTab(),tabFinal))
+        noAux.setCusto(no.getCusto() + 1)
         check  = verificaRepeticao(noAux)
         if check == True:
             no.setfilhoEsquerda(noAux)
+            if profundidade < noAux.getCusto():
+                profundidade = noAux.getCusto()
             abertos.append(noAux)
 
 def buscaGulosa(tabuleiroInicial, tabuleiroFinal, linha, coluna):
+    print('')
+    print('Busca Gulosa:')
+    nos_expandidos = 0
+    nos_visitados = 0
+    time_init = time.time()
     global abertos
     global fechados
     global n
@@ -129,6 +152,7 @@ def buscaGulosa(tabuleiroInicial, tabuleiroFinal, linha, coluna):
     m = coluna 
     raiz = Node(None,tabuleiroInicial)
     raiz.setCustoGuloso(calcManhatann(raiz.getTab(),tabuleiroFinal))
+    raiz.setCusto(0)
     abertos.append(raiz)
     sucesso = False
     fracasso = False
@@ -156,6 +180,13 @@ def buscaGulosa(tabuleiroInicial, tabuleiroFinal, linha, coluna):
                 verificaBaixo(no)
                 verificaEsquerda(no)
 
+    time_end = time.time()
+    nos_visitados = len(fechados)
+    nos_expandidos = len(abertos) + nos_visitados
+    print('Tempo de execução: ' + str(time_end - time_init))
+    print('Nos visitados: ' + str(nos_visitados))
+    print('Nos expandidos: ' + str(nos_expandidos))
+    print('Profundidade:' + str(profundidade))
     if sucesso == True:
         print('Sucesso')
     else: 

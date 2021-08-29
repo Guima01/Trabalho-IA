@@ -1,9 +1,12 @@
 from Node import *
 import copy
+import time
 from queue import Queue
 
 n = 0
 m = 0
+profundidade = 0
+profundidadeAux = 0
 fechados = []
 abertos = Queue()
 
@@ -107,8 +110,15 @@ def verificaEsquerda(no):
     return no, check
 
 def backTracking (tabuleiroInicial, tabuleiroFinal, linha, coluna):
+    print('')
+    print('BackTracking:')
+    nos_expandidos = 0
+    nos_visitados = 0
+    time_init = time.time()
     global n
     global m 
+    global profundidade
+    global profundidadeAux
     n = linha
     m = coluna   
     raiz = Node(None, copy.deepcopy(tabuleiroInicial))
@@ -117,7 +127,6 @@ def backTracking (tabuleiroInicial, tabuleiroFinal, linha, coluna):
     fracasso = False
     check = False
     while (sucesso == False and fracasso == False):
-
         no, check = verificaCima(no)
         if check == False:
             no, check = verificaDireita(no)
@@ -126,13 +135,24 @@ def backTracking (tabuleiroInicial, tabuleiroFinal, linha, coluna):
         if check == False:
             no, check = verificaEsquerda(no)
         if check == True:
+            nos_visitados = nos_visitados + 1
+            profundidadeAux = profundidadeAux + 1
+            if profundidade < profundidadeAux:
+                profundidade = profundidadeAux
             sucesso = verificaObjetivo(no.getTab(),tabuleiroFinal)
 
         elif check == False:
+            profundidadeAux = profundidadeAux - 1
             no = no.getPai()
             if no == None:
                 fracasso = True
         # print(no.getTab())
+    time_end = time.time()
+    nos_expandidos = nos_visitados - 1
+    print('Tempo de execução: ' + str(time_end - time_init))
+    print('Nos visitados: ' + str(nos_visitados))
+    print('Nos expandidos: ' + str(nos_expandidos))
+    print('Profundidade:' + str(profundidade))
     if sucesso == True:
         print('Sucesso')
     else: 

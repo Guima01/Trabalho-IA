@@ -1,9 +1,11 @@
 from Node import *
 import copy
+import time
 from queue import Queue
 
 n = 0
 m = 0
+profundidade = 0
 fechados = []
 abertos = []
 
@@ -33,6 +35,7 @@ def verificaCima(no):
     tab = copy.deepcopy(no.getTab())  #cria uma copia do tabuleiro atual
     global abertos 
     global n
+    global profundidade
     check = False  #booleano de checagem
     if(n > i + 1):  #Verifica se é possível a peça se mover
         tab[i][j] = tab[i+1][j]         #Faz as mudanças no tabuleiro
@@ -42,6 +45,8 @@ def verificaCima(no):
         check = verificaRepeticao(noAux)    #verifica se o tabuleiro do nó filho ja esta na lista de fechados
         if check == True:       #Se sim
             no.setfilhoCima(noAux)    #seta ele como filho
+            if profundidade < noAux.getCusto():
+                profundidade = noAux.getCusto()
             abertos.append(noAux)    #Adiciona ele na lista de abertos
     
 
@@ -49,6 +54,7 @@ def verificaDireita( no):
     i, j = buscaVazio(no.getTab())
     tab = copy.deepcopy(no.getTab())
     global abertos
+    global profundidade
     check = False
     if(-1 < j - 1):
         tab[i][j] = tab[i][j-1]
@@ -58,6 +64,8 @@ def verificaDireita( no):
         check = verificaRepeticao(noAux)
         if check == True:
             no.setfilhoDireita(noAux)
+            if profundidade < noAux.getCusto():
+                profundidade = noAux.getCusto()
             abertos.append(noAux)           
 
 
@@ -65,6 +73,7 @@ def verificaBaixo(no):
     i, j = buscaVazio(no.getTab()) 
     tab = copy.deepcopy(no.getTab())
     global abertos
+    global profundidade
     check = False
     if(-1 < i - 1):
         tab[i][j] = tab[i-1][j]
@@ -74,6 +83,8 @@ def verificaBaixo(no):
         check = verificaRepeticao(noAux)
         if check == True:
             no.setfilhoBaixo(noAux)  
+            if profundidade < noAux.getCusto():
+                profundidade = noAux.getCusto()
             abertos.append(noAux) 
     
 
@@ -83,6 +94,7 @@ def verificaEsquerda(no):
     tab = copy.deepcopy(no.getTab())
     global n
     global m
+    global profundidade
     check = False
     if(m > j + 1):
         tab[i][j] = tab[i][j+1]
@@ -92,14 +104,22 @@ def verificaEsquerda(no):
         check  = verificaRepeticao(noAux)
         if check == True:
             no.setfilhoEsquerda(noAux)
+            if profundidade < noAux.getCusto():
+                profundidade = noAux.getCusto()
             abertos.append(noAux)
 
 
 def buscaOrdenada(tabuleiroInicial, tabuleiroFinal, linha, coluna):
+    print('')
+    print('Busca Ordenada:')
+    nos_expandidos = 0
+    nos_visitados = 0
+    time_init = time.time()
     global abertos
     global fechados
     global n
     global m
+    global profundidade
     n = linha
     m = coluna 
     raiz = Node(None,tabuleiroInicial)
@@ -130,8 +150,14 @@ def buscaOrdenada(tabuleiroInicial, tabuleiroFinal, linha, coluna):
                 verificaDireita(no)
                 verificaBaixo(no)
                 verificaEsquerda(no)
-            print(no.getTab())
-
+            # print(no.getTab())
+    time_end = time.time()
+    nos_visitados = len(fechados)
+    nos_expandidos = len(abertos) + nos_visitados
+    print('Tempo de execução: ' + str(time_end - time_init))
+    print('Nos visitados: ' + str(nos_visitados))
+    print('Nos expandidos: ' + str(nos_expandidos))
+    print('Profundidade:' + str(profundidade))
     if sucesso == True:
         print('Sucesso')
     else: 

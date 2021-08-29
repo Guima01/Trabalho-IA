@@ -1,11 +1,13 @@
 from Node import *
 import copy
+import time
 from queue import LifoQueue
 
 import sys
 
 fechados = []
 abertos = LifoQueue()
+profundidade = 0
 n = 0
 m = 0
 
@@ -35,14 +37,18 @@ def verificaCima(no):
     tab = copy.deepcopy(no.getTab())
     global abertos
     global n
+    global profundidade
     check = False
     if(n > i + 1):
         tab[i][j] = tab[i+1][j]
         tab[i+1][j] = '-'
         noAux = Node(no, tab)
+        noAux.setCusto(no.getCusto() + 1)
         check = verificaRepeticao(noAux)
         if check == True:
             no.setfilhoCima(noAux)
+            if profundidade < noAux.getCusto():
+                profundidade = noAux.getCusto()
             abertos.put(noAux)
     
 
@@ -50,14 +56,18 @@ def verificaDireita( no):
     i, j = buscaVazio(no.getTab())
     tab = copy.deepcopy(no.getTab())
     global abertos
+    global profundidade
     check = False
     if(-1 < j - 1):
         tab[i][j] = tab[i][j-1]
         tab[i][j-1] = '-'
         noAux = Node(no, tab)
+        noAux.setCusto(no.getCusto() + 1)
         check = verificaRepeticao(noAux)
         if check == True:
             no.setfilhoDireita(noAux)
+            if profundidade < noAux.getCusto():
+                profundidade = noAux.getCusto()
             abertos.put(noAux)           
 
 
@@ -65,34 +75,48 @@ def verificaBaixo(no):
     i, j = buscaVazio(no.getTab())
     tab = copy.deepcopy(no.getTab())
     global abertos
+    global profundidade
     check = False
     if(-1 < i - 1):
         tab[i][j] = tab[i-1][j]
         tab[i-1][j] = '-'
         noAux = Node(no, tab)
+        noAux.setCusto(no.getCusto() + 1)
         check = verificaRepeticao(noAux)
         if check == True:
             no.setfilhoBaixo(noAux)  
+            if profundidade < noAux.getCusto():
+                profundidade = noAux.getCusto()
             abertos.put(noAux) 
     
 
 def verificaEsquerda(no):
-    global abertos
     i, j = buscaVazio(no.getTab())
     tab = copy.deepcopy(no.getTab())
+    global abertos
     global m
+    global profundidade
     check = False
     if(m > j + 1):
         tab[i][j] = tab[i][j+1]
         tab[i][j+1] = '-'
         noAux = Node(no, tab)
+        noAux.setCusto(no.getCusto() + 1)
         check  = verificaRepeticao(noAux)
         if check == True:
             no.setfilhoEsquerda(noAux)
+            if profundidade < noAux.getCusto():
+                profundidade = noAux.getCusto()
             abertos.put(noAux)
 
 
 def buscaProfundidade(tabuleiroInicial, tabuleiroFinal, linha, coluna):
+    print('')
+    print('Busca Profundidade:')
+    nos_expandidos = 0
+    nos_visitados = 0
+    time_init = time.time()
+    global profundidade
     global abertos
     global fechados
     global n
@@ -100,6 +124,7 @@ def buscaProfundidade(tabuleiroInicial, tabuleiroFinal, linha, coluna):
     n = linha
     m = coluna
     raiz = Node(None, tabuleiroInicial)
+    raiz.setCusto(0)
     sucesso = verificaObjetivo(raiz.getTab(), tabuleiroFinal)
     abertos.put(copy.deepcopy(raiz))
     fracasso = False
@@ -112,12 +137,18 @@ def buscaProfundidade(tabuleiroInicial, tabuleiroFinal, linha, coluna):
             if verificaObjetivo(no.getTab(),tabuleiroFinal):
                 sucesso = True
             else:
-                verificaCima(no)
-                verificaDireita(no)
-                verificaBaixo(no)
                 verificaEsquerda(no)
+                verificaBaixo(no)
+                verificaDireita(no)
+                verificaCima(no)
                 fechados.append(no)
-
+    time_end = time.time()
+    nos_visitados = len(fechados)
+    nos_expandidos = abertos.qsize() + nos_visitados
+    print('Tempo de execução: ' + str(time_end - time_init))
+    print('Nos visitados: ' + str(nos_visitados))
+    print('Nos expandidos: ' + str(nos_expandidos))
+    print('Profundidade:' + str(profundidade))
     if sucesso == True:
         print('Sucesso')
     else: 
