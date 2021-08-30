@@ -5,6 +5,7 @@ from buscaProfundidade import *
 from backTracking import *
 from buscaOrdenada import *
 from buscaGulosa import *
+from buscaAStar import *
 
 n = 0 # linha
 m = 0 #coluna
@@ -44,5 +45,6 @@ def main():
     buscaProfundidade(tabuleiroInicial, tabuleiroFinal, n, m)
     buscaOrdenada(tabuleiroInicial, tabuleiroFinal, n, m)
     buscaGulosa(tabuleiroInicial, tabuleiroFinal, n, m)
+    buscaAStar(tabuleiroInicial, tabuleiroFinal, n, m)
 
 main()
