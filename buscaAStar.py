@@ -176,11 +176,11 @@ def buscaAStar(tabuleiroInicial, tabuleiroFinal, linha, coluna):
             i = 0                                                            #Diferença basicamente são nas linhas (115 até 124)
             menor = -1                                                      
             for i in range(len(abertos)):
-                if abertos[i].getCustoGuloso() < menor or menor == -1:
-                    menor = abertos[i].getCustoGuloso()
+                if (abertos[i].getCustoGuloso() + abertos[i].getCusto()) < menor or menor == -1:
+                    menor = (abertos[i].getCustoGuloso() + abertos[i].getCusto())
             i = 0
             for i in range(len(abertos)):
-                if abertos[i].getCustoGuloso() == menor:
+                if (abertos[i].getCustoGuloso() + abertos[i].getCusto()) == menor:
                     no = abertos.pop(i)
                     break
             fechados.append(no)

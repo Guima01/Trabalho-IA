@@ -176,14 +176,15 @@ def buscaGulosa(tabuleiroInicial, tabuleiroFinal, linha, coluna):
             i = 0                                                            #Diferença basicamente são nas linhas (115 até 124)
             menor = -1                                                      
             for i in range(len(abertos)):
-                if (abertos[i].getCustoGuloso() + abertos[i].getCusto()) < menor or menor == -1:
-                    menor = (abertos[i].getCustoGuloso() + abertos[i].getCusto())
+                if abertos[i].getCusto() < menor or menor == -1:
+                    menor = abertos[i].getCusto()
             i = 0
             for i in range(len(abertos)):
-                if (abertos[i].getCustoGuloso() + abertos[i].getCusto()) == menor:
+                if abertos[i].getCusto() == menor:
                     no = abertos.pop(i)
                     break
             fechados.append(no)
+            
             if verificaObjetivo(no.getTab(),tabuleiroFinal):
                 noResult = no
                 sucesso = True
