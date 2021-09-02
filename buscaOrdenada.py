@@ -151,7 +151,6 @@ def buscaOrdenada(tabuleiroInicial, tabuleiroFinal, linha, coluna):
                 if abertos[i].getCusto() == menor:
                     no = abertos.pop(i)
                     break
-            fechados.append(no)
             if verificaObjetivo(no.getTab(),tabuleiroFinal):
                 noResult = no
                 sucesso = True
@@ -160,6 +159,7 @@ def buscaOrdenada(tabuleiroInicial, tabuleiroFinal, linha, coluna):
                 verificaDireita(no)
                 verificaBaixo(no)
                 verificaEsquerda(no)
+                fechados.append(no)
             # print(no.getTab())
     time_end = time.time()
     print('Tempo de execução: ' + str(time_end - time_init))
@@ -172,6 +172,7 @@ def buscaOrdenada(tabuleiroInicial, tabuleiroFinal, linha, coluna):
         print('Nos visitados: ' + str(nos_visitados))
         print('Nos expandidos: ' + str(nos_expandidos))
         print('Profundidade:' + str(profundidade))
+        print('Fator médio de ramificação:' + str((nos_expandidos-1)/ nos_visitados))
         # print('Caminho:')
         # for aux in caminho:
         #     print(aux.getTab())

@@ -161,11 +161,12 @@ def backTracking (tabuleiroInicial, tabuleiroFinal, linha, coluna):
     time_end = time.time()
     if sucesso == True:
         retornaCaminho(no)
-        nos_expandidos = nos_visitados - 1
+        nos_expandidos = nos_visitados
         print('Tempo de execução: ' + str(time_end - time_init))
         print('Nos visitados: ' + str(nos_visitados))
         print('Nos expandidos: ' + str(nos_expandidos))
         print('Profundidade:' + str(profundidade))
+        print('Fator médio de ramificação:' + str((nos_expandidos-1)/ nos_visitados))
         # print('Caminho:')
         # for aux in caminho:
         #     print(aux.getTab())

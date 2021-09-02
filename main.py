@@ -6,6 +6,7 @@ from backTracking import *
 from buscaOrdenada import *
 from buscaGulosa import *
 from buscaAStar import *
+from buscaIDAStar import *
 
 n = 0 # linha
 m = 0 #coluna
@@ -40,11 +41,12 @@ def main():
         for j in range (m):
             tabuleiroFinal[i].append(input())
 
-    backTracking(tabuleiroInicial, tabuleiroFinal, n, m)
-    buscaLargura(tabuleiroInicial, tabuleiroFinal, n, m)
-    buscaProfundidade(tabuleiroInicial, tabuleiroFinal, n, m)
-    buscaOrdenada(tabuleiroInicial, tabuleiroFinal, n, m)
-    buscaGulosa(tabuleiroInicial, tabuleiroFinal, n, m)
-    buscaAStar(tabuleiroInicial, tabuleiroFinal, n, m)
+    # backTracking(tabuleiroInicial, tabuleiroFinal, n, m)
+    # buscaLargura(tabuleiroInicial, tabuleiroFinal, n, m)
+    # buscaProfundidade(tabuleiroInicial, tabuleiroFinal, n, m)
+    # buscaOrdenada(tabuleiroInicial, tabuleiroFinal, n, m)
+    # buscaGulosa(tabuleiroInicial, tabuleiroFinal, n, m)
+    # buscaAStar(tabuleiroInicial, tabuleiroFinal, n, m)
+    buscaIDAStar(tabuleiroInicial, tabuleiroFinal, n, m)
 
 main()

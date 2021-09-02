@@ -161,6 +161,7 @@ def buscaProfundidade(tabuleiroInicial, tabuleiroFinal, linha, coluna):
         print('Nos visitados: ' + str(nos_visitados))
         print('Nos expandidos: ' + str(nos_expandidos))
         print('Profundidade:' + str(profundidade))
+        print('Fator médio de ramificação:' + str((nos_expandidos-1)/ nos_visitados))
         # print('Caminho:')
         # for aux in caminho:
         #     print(aux.getTab())
