@@ -72,8 +72,6 @@ def verificaCima(no):
     global n
     global m
     check = False
-    # print('Cima')
-    # print(no.getfilhoCima())
     if(n > i + 1 and no.getfilhoCima() == None):
         tab[i][j] = tab[i+1][j]
         tab[i+1][j] = '-'
@@ -90,8 +88,6 @@ def verificaDireita( no):
     i, j = buscaVazio(no.getTab())
     tab = copy.deepcopy(no.getTab())
     check = False
-    # print('Direita')
-    # print(no.getfilhoDireita())
     if(-1 < j - 1 and no.getfilhoDireita() == None):
         tab[i][j] = tab[i][j-1]
         tab[i][j-1] = '-'
@@ -109,8 +105,6 @@ def verificaBaixo(no):
     i, j = buscaVazio(no.getTab())
     tab = copy.deepcopy(no.getTab())
     check = False
-    # print('Baixo')
-    # print(no.getfilhoBaixo())
     if(-1 < i - 1 and no.getfilhoBaixo() == None):
         tab[i][j] = tab[i-1][j]
         tab[i-1][j] = '-'
@@ -181,26 +175,13 @@ def buscaIDAStar(tabuleiroInicial, tabuleiroFinal, linha, coluna):
                         elif descartados > no.getCusto() + no.getCustoGuloso():
                             descartados = no.getCusto() + no.getCustoGuloso()
                         no = no.getPai()
-
                 no, check = verificaCima(no)
                 if check == False:
-                    # print('A')
-                    # print(no)
-                    # print(check)
                     no, check = verificaDireita(no)
-                    # print('B')
-                    # print(no)
-                    # print(check)
                 if check == False:
                     no, check = verificaBaixo(no)
-                    # print('C')
-                    # print(no)
-                    # print(check)
                 if check == False:
                     no, check = verificaEsquerda(no)
-                    # print('D')
-                    # print(no)
-                    # print(check)
                 if check == False:
                     if no == raiz:
                         patamar_old = patamar
