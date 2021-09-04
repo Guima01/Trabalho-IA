@@ -43,7 +43,7 @@ def verificaRepeticao(no) :
             return False
     return True
 
-def verificaCima(no):
+def moveBaixo(no):
     i, j = buscaVazio(no.getTab())
     tab = copy.deepcopy(no.getTab())
     global abertos
@@ -62,7 +62,7 @@ def verificaCima(no):
                 profundidade = noAux.getCusto()
             abertos.put(noAux)
     
-def verificaDireita( no):
+def moveEsquerda( no):
     i, j = buscaVazio(no.getTab())
     tab = copy.deepcopy(no.getTab())
     global abertos
@@ -80,7 +80,7 @@ def verificaDireita( no):
                 profundidade = noAux.getCusto()
             abertos.put(noAux)           
 
-def verificaBaixo(no):
+def moveCima(no):
     i, j = buscaVazio(no.getTab())
     tab = copy.deepcopy(no.getTab())
     global abertos
@@ -98,7 +98,7 @@ def verificaBaixo(no):
                 profundidade = noAux.getCusto()
             abertos.put(noAux) 
     
-def verificaEsquerda(no):
+def moveDireita(no):
     i, j = buscaVazio(no.getTab())
     tab = copy.deepcopy(no.getTab())
     global abertos
@@ -147,10 +147,10 @@ def buscaProfundidade(tabuleiroInicial, tabuleiroFinal, linha, coluna):
                 noResult = no
                 sucesso = True
             else:
-                verificaEsquerda(no)
-                verificaBaixo(no)
-                verificaDireita(no)
-                verificaCima(no)
+                moveDireita(no)
+                moveCima(no)
+                moveEsquerda(no)
+                moveBaixo(no)
                 fechados.append(no)
     time_end = time.time()
     print('Tempo de execução: ' + str(time_end - time_init))

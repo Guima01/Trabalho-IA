@@ -167,7 +167,6 @@ def buscaOrdenada(tabuleiroInicial, tabuleiroFinal, linha, coluna):
         retornaCaminho(noResult)
         nos_visitados = len(fechados)
         nos_expandidos = len(abertos) + nos_visitados
-        print('Tempo de execução: ' + str(time_end - time_init))
         print('Custo Solução:' + str(noResult.getCusto()))
         print('Nos visitados: ' + str(nos_visitados))
         print('Nos expandidos: ' + str(nos_expandidos))

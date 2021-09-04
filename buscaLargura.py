@@ -41,7 +41,7 @@ def verificaRepeticao(no) :
             return False
     return True
 
-def verificaCima(no):
+def moveBaixo(no):
     i, j = buscaVazio(no.getTab())   # Busca a posição do -
     tab = copy.deepcopy(no.getTab())  #cria uma copia do tabuleiro atual
     global abertos 
@@ -60,7 +60,7 @@ def verificaCima(no):
                 profundidade = noAux.getCusto()
             abertos.put(noAux)    #Adiciona ele na lista de abertos
     
-def verificaDireita( no):
+def moveEsquerda( no):
     i, j = buscaVazio(no.getTab())
     tab = copy.deepcopy(no.getTab())
     global abertos
@@ -78,7 +78,7 @@ def verificaDireita( no):
                 profundidade = noAux.getCusto()
             abertos.put(noAux)           
 
-def verificaBaixo(no):
+def moveCima(no):
     i, j = buscaVazio(no.getTab()) 
     tab = copy.deepcopy(no.getTab())
     global abertos
@@ -96,7 +96,7 @@ def verificaBaixo(no):
                 profundidade = noAux.getCusto()
             abertos.put(noAux) 
     
-def verificaEsquerda(no):
+def moveDireita(no):
     global abertos
     i, j = buscaVazio(no.getTab())
     tab = copy.deepcopy(no.getTab())
@@ -146,10 +146,10 @@ def buscaLargura(tabuleiroInicial, tabuleiroFinal, linha, coluna):
                 noResult = no
                 sucesso = True
             else:
-                verificaCima(no)
-                verificaDireita(no)
-                verificaBaixo(no)
-                verificaEsquerda(no)
+                moveBaixo(no)
+                moveEsquerda(no)
+                moveCima(no)
+                moveDireita(no)
                 fechados.append(no)
             # print(no.getTab())
     time_end = time.time()
@@ -158,6 +158,7 @@ def buscaLargura(tabuleiroInicial, tabuleiroFinal, linha, coluna):
         retornaCaminho(noResult)
         nos_visitados = len(fechados)
         nos_expandidos = abertos.qsize() + nos_visitados
+        print('Custo Solução:' + str(noResult.getCusto()))
         print('Nos visitados: ' + str(nos_visitados))
         print('Nos expandidos: ' + str(nos_expandidos))
         print('Profundidade:' + str(profundidade))

@@ -57,7 +57,7 @@ def retornaCaminho(no):
         noAux = noAux.getPai()
     caminho.reverse()
 
-def verificaCima(no):
+def moveBaixo(no):
     i, j = buscaVazio(no.getTab())
     tab = copy.deepcopy(no.getTab())
     global n
@@ -73,7 +73,7 @@ def verificaCima(no):
             return noAux, check
     return no, check
 
-def verificaDireita( no):
+def moveEsquerda( no):
     i, j = buscaVazio(no.getTab())
     tab = copy.deepcopy(no.getTab())
     check = False
@@ -88,7 +88,7 @@ def verificaDireita( no):
 
     return no, check
 
-def verificaBaixo(no):
+def moveCima(no):
     i, j = buscaVazio(no.getTab())
     tab = copy.deepcopy(no.getTab())
     check = False
@@ -103,7 +103,7 @@ def verificaBaixo(no):
     
     return no, check
 
-def verificaEsquerda(no):
+def moveDireita(no):
     i, j = buscaVazio(no.getTab())
     tab = copy.deepcopy(no.getTab())
     global n
@@ -130,6 +130,7 @@ def backTracking (tabuleiroInicial, tabuleiroFinal, linha, coluna):
     global m 
     global profundidade
     global profundidadeAux
+    folha = 0
     n = linha
     m = coluna   
     raiz = Node(None, copy.deepcopy(tabuleiroInicial))
@@ -138,13 +139,13 @@ def backTracking (tabuleiroInicial, tabuleiroFinal, linha, coluna):
     fracasso = False
     check = False
     while (sucesso == False and fracasso == False):
-        no, check = verificaCima(no)
+        no, check = moveBaixo(no)
         if check == False:
-            no, check = verificaDireita(no)
+            no, check = moveEsquerda(no)
         if check == False:
-            no, check = verificaBaixo(no)
+            no, check = moveCima(no)
         if check == False:
-            no, check = verificaEsquerda(no)
+            no, check = moveDireita(no)
         if check == True:
             nos_visitados = nos_visitados + 1
             profundidadeAux = profundidadeAux + 1
@@ -154,19 +155,23 @@ def backTracking (tabuleiroInicial, tabuleiroFinal, linha, coluna):
 
         elif check == False:
             profundidadeAux = profundidadeAux - 1
+            if no.getfilhoBaixo() == None and no.getfilhoCima == None and no.getfilhoDireita == None and no.getfilhoEsquerda == None:
+                folha += 1
             no = no.getPai()
             if no == None:
                 fracasso = True
         # print(no.getTab())
+    folha += 1
     time_end = time.time()
+    print('Tempo de execução: ' + str(time_end - time_init))
     if sucesso == True:
         retornaCaminho(no)
         nos_expandidos = nos_visitados
-        print('Tempo de execução: ' + str(time_end - time_init))
+        print('Custo Solução:' + str(no.getCusto()))
         print('Nos visitados: ' + str(nos_visitados))
         print('Nos expandidos: ' + str(nos_expandidos))
         print('Profundidade:' + str(profundidade))
-        print('Fator médio de ramificação:' + str((nos_expandidos-1)/ nos_visitados))
+        print('Fator médio de ramificação:' + str((nos_expandidos-1)/ (nos_visitados - folha)))
         # print('Caminho:')
         # for aux in caminho:
         #     print(aux.getTab())

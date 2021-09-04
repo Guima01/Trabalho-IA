@@ -6,6 +6,9 @@ from queue import Queue
 n = 0
 m = 0
 profundidade = 0
+profundidadeAux = 0
+nos_visitados = 0
+nos_expandidos = 0
 patamar = None
 patamar_old = -1
 caminho = []
@@ -71,6 +74,9 @@ def verificaCima(no):
     tab = copy.deepcopy(no.getTab())
     global n
     global m
+    global nos_visitados
+    global profundidade
+    global profundidadeAux
     check = False
     if(n > i + 1 and no.getfilhoCima() == None):
         tab[i][j] = tab[i+1][j]
@@ -80,6 +86,10 @@ def verificaCima(no):
         noAux.setCusto(no.getCusto() + 1)
         check = verificaRepeticao(noAux)
         if check == True:
+            nos_visitados += 1
+            profundidadeAux = profundidadeAux + 1
+            if profundidade < profundidadeAux:
+                profundidade = profundidadeAux
             no.setfilhoCima(noAux)
             return noAux, check
     return no, check
@@ -87,6 +97,9 @@ def verificaCima(no):
 def verificaDireita( no):
     i, j = buscaVazio(no.getTab())
     tab = copy.deepcopy(no.getTab())
+    global nos_visitados
+    global profundidade
+    global profundidadeAux
     check = False
     if(-1 < j - 1 and no.getfilhoDireita() == None):
         tab[i][j] = tab[i][j-1]
@@ -97,6 +110,10 @@ def verificaDireita( no):
         check = verificaRepeticao(noAux)
         if check == True:
             no.setfilhoDireita(noAux)
+            profundidadeAux = profundidadeAux + 1
+            if profundidade < profundidadeAux:
+                profundidade = profundidadeAux
+            nos_visitados += 1
             return noAux, check
 
     return no, check
@@ -104,6 +121,9 @@ def verificaDireita( no):
 def verificaBaixo(no):
     i, j = buscaVazio(no.getTab())
     tab = copy.deepcopy(no.getTab())
+    global nos_visitados
+    global profundidade
+    global profundidadeAux
     check = False
     if(-1 < i - 1 and no.getfilhoBaixo() == None):
         tab[i][j] = tab[i-1][j]
@@ -113,7 +133,11 @@ def verificaBaixo(no):
         noAux.setCusto(no.getCusto() + 1)
         check = verificaRepeticao(noAux)
         if check == True:
-            no.setfilhoBaixo(noAux)  
+            no.setfilhoBaixo(noAux)
+            profundidadeAux = profundidadeAux + 1
+            if profundidade < profundidadeAux:
+                profundidade = profundidadeAux
+            nos_visitados += 1  
             return noAux, check
     
     return no, check
@@ -123,9 +147,10 @@ def verificaEsquerda(no):
     tab = copy.deepcopy(no.getTab())
     global n
     global m
+    global nos_visitados
+    global profundidade
+    global profundidadeAux
     check = False
-    # print('Esquerda')
-    # print(no.getfilhoEsquerda())
     if(m > j + 1 and no.getfilhoEsquerda() == None):
         tab[i][j] = tab[i][j+1]
         tab[i][j+1] = '-'
@@ -135,29 +160,38 @@ def verificaEsquerda(no):
         check = verificaRepeticao(noAux)
         if check == True:
             no.setfilhoEsquerda(noAux)
+            profundidadeAux = profundidadeAux + 1
+            if profundidade < profundidadeAux:
+                profundidade = profundidadeAux
+            nos_visitados += 1
             return noAux, check 
     return no, check
 
 def buscaIDAStar(tabuleiroInicial, tabuleiroFinal, linha, coluna):
     print('')
     print('Busca IDA*:')
-    nos_expandidos = 0
-    nos_visitados = 0
     time_init = time.time()
+    global nos_visitados
+    global nos_expandidos
     global n
     global m
     global tabFinal
     global patamar
     global patamar_old
     global descartados
+    global profundidade
+    global profundidadeAux
     tabFinal = tabuleiroFinal
+    folha = 0
     n = linha
     m = coluna 
     raiz = Node(None,tabuleiroInicial)
     raiz.setCustoGuloso(calcManhatann(raiz.getTab(),tabuleiroFinal))
     raiz.setCusto(0)
     patamar = raiz.getCustoGuloso() + raiz.getCusto()
-    no = raiz
+    s = copy.deepcopy(raiz)
+    no = s
+    nos_expandidos += 1
     sucesso = False
     fracasso = False
     check = False
@@ -167,6 +201,7 @@ def buscaIDAStar(tabuleiroInicial, tabuleiroFinal, linha, coluna):
             fracasso = True
         else:
             if verificaObjetivo(no.getTab(),tabuleiroFinal) and no.getCustoGuloso() + no.getCusto() <= patamar:
+                noResult = no
                 sucesso = True
             else:
                 if no.getCusto() + no.getCustoGuloso() > patamar:
@@ -175,6 +210,7 @@ def buscaIDAStar(tabuleiroInicial, tabuleiroFinal, linha, coluna):
                         elif descartados > no.getCusto() + no.getCustoGuloso():
                             descartados = no.getCusto() + no.getCustoGuloso()
                         no = no.getPai()
+
                 no, check = verificaCima(no)
                 if check == False:
                     no, check = verificaDireita(no)
@@ -183,26 +219,32 @@ def buscaIDAStar(tabuleiroInicial, tabuleiroFinal, linha, coluna):
                 if check == False:
                     no, check = verificaEsquerda(no)
                 if check == False:
-                    if no == raiz:
+                    if no == s:
                         patamar_old = patamar
                         patamar = descartados
+                        s = copy.deepcopy(raiz)
+                        no = s
+                        descartados = None
+                        
                     else:
-                        no = no.getPai()
+                        profundidadeAux -= 1
+                        folha += 1
+                        no = no.getPai() 
 
+    print
     time_end = time.time()
+    folha += 1
     print('Tempo de execução: ' + str(time_end - time_init))
     if sucesso == True:
-        print('Brabo')
-    #     retornaCaminho(noResult)
-    #     nos_visitados = len(fechados)
-    #     nos_expandidos = len(abertos) + nos_visitados
-    #     print('Custo Solução:' + str(noResult.getCusto()) )
-    #     print('Nos visitados: ' + str(nos_visitados))
-    #     print('Nos expandidos: ' + str(nos_expandidos))
-    #     print('Profundidade:' + str(profundidade))
-    #     print('Fator médio de ramificação:' + str((nos_expandidos-1)/ nos_visitados))
-    #     print('Caminho:')
-    #     for aux in caminho:
-    #         print(aux.getTab())
+        retornaCaminho(noResult)
+        nos_expandidos =  nos_visitados
+        print('Custo Solução:' + str(noResult.getCusto()))
+        print('Nos visitados: ' + str(nos_visitados))
+        print('Nos expandidos: ' + str(nos_expandidos))
+        print('Profundidade:' + str(profundidade))
+        print('Fator médio de ramificação:' + str((nos_expandidos-1)/ (nos_visitados - folha)))
+        # print('Caminho:')
+        # for aux in caminho:
+        #     print(aux.getTab())
     else: 
         print('Fracasso')

@@ -13,10 +13,10 @@ m = 0 #coluna
 
 
 # ordem Backtracking:
-# Cima 
-# Direita
 # Baixo
 # Esquerda
+# Cima
+# Direita
 
 
 
