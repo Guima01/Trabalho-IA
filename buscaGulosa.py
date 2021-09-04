@@ -195,17 +195,15 @@ def buscaGulosa(tabuleiroInicial, tabuleiroFinal, linha, coluna):
 
     time_end = time.time()
     print('Tempo de execução: ' + str(time_end - time_init))
+    nos_visitados = len(fechados)
+    nos_expandidos = len(abertos) + nos_visitados
+    print('Nos visitados: ' + str(nos_visitados))
+    print('Nos expandidos: ' + str(nos_expandidos))
+    print('Profundidade:' + str(profundidade))
+    print('Fator médio de ramificação:' + str((nos_expandidos-1)/ nos_visitados))
     if sucesso == True:
         retornaCaminho(noResult)
-        nos_visitados = len(fechados)
-        nos_expandidos = len(abertos) + nos_visitados
         print('Custo Solução:' + str(noResult.getCusto()))
-        print('Nos visitados: ' + str(nos_visitados))
-        print('Nos expandidos: ' + str(nos_expandidos))
-        print('Profundidade:' + str(profundidade))
-        print('Fator médio de ramificação:' + str((nos_expandidos-1)/ nos_visitados))
         # print('Caminho:')
         # for aux in caminho:
         #     print(aux.getTab())
-    else: 
-        print('Fracasso')

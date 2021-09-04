@@ -197,7 +197,7 @@ def buscaIDAStar(tabuleiroInicial, tabuleiroFinal, linha, coluna):
     check = False
     noResult = None
     while(sucesso == False and fracasso == False):
-        if patamar_old == patamar:
+        if patamar_old == patamar or patamar == None:
             fracasso = True
         else:
             if verificaObjetivo(no.getTab(),tabuleiroFinal) and no.getCustoGuloso() + no.getCusto() <= patamar:
@@ -225,6 +225,11 @@ def buscaIDAStar(tabuleiroInicial, tabuleiroFinal, linha, coluna):
                         s = copy.deepcopy(raiz)
                         no = s
                         descartados = None
+                        profundidade = 0
+                        profundidadeAux = 0
+                        folha = 0
+                        nos_expandidos = 0
+                        nos_visitados = 0
                         
                     else:
                         profundidadeAux -= 1
@@ -234,17 +239,15 @@ def buscaIDAStar(tabuleiroInicial, tabuleiroFinal, linha, coluna):
     print
     time_end = time.time()
     folha += 1
+    nos_expandidos =  nos_visitados
     print('Tempo de execução: ' + str(time_end - time_init))
+    print('Nos visitados: ' + str(nos_visitados))
+    print('Nos expandidos: ' + str(nos_expandidos))
+    print('Profundidade:' + str(profundidade))
+    print('Fator médio de ramificação:' + str((nos_expandidos-1)/ (nos_visitados - folha)))
     if sucesso == True:
         retornaCaminho(noResult)
-        nos_expandidos =  nos_visitados
         print('Custo Solução:' + str(noResult.getCusto()))
-        print('Nos visitados: ' + str(nos_visitados))
-        print('Nos expandidos: ' + str(nos_expandidos))
-        print('Profundidade:' + str(profundidade))
-        print('Fator médio de ramificação:' + str((nos_expandidos-1)/ (nos_visitados - folha)))
         # print('Caminho:')
         # for aux in caminho:
         #     print(aux.getTab())
-    else: 
-        print('Fracasso')

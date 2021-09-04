@@ -38,7 +38,7 @@ def verificaObjetivo(tabuleiroAtual, tabuleiroFinal):
         return False
     return True
 
-def verificalistaBacktracking(no) :
+def verificaRepeticao(no) :
     noAux = no.getPai()
     boolean = False
     while(noAux != None):
@@ -57,7 +57,7 @@ def retornaCaminho(no):
         noAux = noAux.getPai()
     caminho.reverse()
 
-def moveBaixo(no):
+def verificaCima(no):
     i, j = buscaVazio(no.getTab())
     tab = copy.deepcopy(no.getTab())
     global n
@@ -67,13 +67,13 @@ def moveBaixo(no):
         tab[i][j] = tab[i+1][j]
         tab[i+1][j] = '-'
         noAux = Node(no, tab)
-        check = verificalistaBacktracking(noAux)
+        check = verificaRepeticao(noAux)
         if check == True:
             no.setfilhoCima(noAux)
             return noAux, check
     return no, check
 
-def moveEsquerda( no):
+def verificaDireita( no):
     i, j = buscaVazio(no.getTab())
     tab = copy.deepcopy(no.getTab())
     check = False
@@ -81,14 +81,14 @@ def moveEsquerda( no):
         tab[i][j] = tab[i][j-1]
         tab[i][j-1] = '-'
         noAux = Node(no, tab)
-        check = verificalistaBacktracking(noAux)
+        check = verificaRepeticao(noAux)
         if check == True:
             no.setfilhoDireita(noAux)
             return noAux, check
 
     return no, check
 
-def moveCima(no):
+def verificaBaixo(no):
     i, j = buscaVazio(no.getTab())
     tab = copy.deepcopy(no.getTab())
     check = False
@@ -96,14 +96,14 @@ def moveCima(no):
         tab[i][j] = tab[i-1][j]
         tab[i-1][j] = '-'
         noAux = Node(no, tab)
-        check = verificalistaBacktracking(noAux)
+        check = verificaRepeticao(noAux)
         if check == True:
             no.setfilhoBaixo(noAux)  
             return noAux, check
     
     return no, check
 
-def moveDireita(no):
+def verificaEsquerda(no):
     i, j = buscaVazio(no.getTab())
     tab = copy.deepcopy(no.getTab())
     global n
@@ -113,7 +113,7 @@ def moveDireita(no):
         tab[i][j] = tab[i][j+1]
         tab[i][j+1] = '-'
         noAux = Node(no, tab)
-        check  = verificalistaBacktracking(noAux)
+        check  = verificaRepeticao(noAux)
         if check == True:
             no.setfilhoEsquerda(noAux)
             return noAux, check 
@@ -139,13 +139,13 @@ def backTracking (tabuleiroInicial, tabuleiroFinal, linha, coluna):
     fracasso = False
     check = False
     while (sucesso == False and fracasso == False):
-        no, check = moveBaixo(no)
+        no, check = verificaCima(no)
         if check == False:
-            no, check = moveEsquerda(no)
+            no, check = verificaDireita(no)
         if check == False:
-            no, check = moveCima(no)
+            no, check = verificaBaixo(no)
         if check == False:
-            no, check = moveDireita(no)
+            no, check = verificaEsquerda(no)
         if check == True:
             nos_visitados = nos_visitados + 1
             profundidadeAux = profundidadeAux + 1
@@ -163,17 +163,15 @@ def backTracking (tabuleiroInicial, tabuleiroFinal, linha, coluna):
         # print(no.getTab())
     folha += 1
     time_end = time.time()
+    nos_expandidos = nos_visitados
     print('Tempo de execução: ' + str(time_end - time_init))
+    print('Nos visitados: ' + str(nos_visitados))
+    print('Nos expandidos: ' + str(nos_expandidos))
+    print('Profundidade:' + str(profundidade))
+    print('Fator médio de ramificação:' + str((nos_expandidos-1)/ (nos_visitados - folha)))
     if sucesso == True:
         retornaCaminho(no)
-        nos_expandidos = nos_visitados
         print('Custo Solução:' + str(no.getCusto()))
-        print('Nos visitados: ' + str(nos_visitados))
-        print('Nos expandidos: ' + str(nos_expandidos))
-        print('Profundidade:' + str(profundidade))
-        print('Fator médio de ramificação:' + str((nos_expandidos-1)/ (nos_visitados - folha)))
         # print('Caminho:')
         # for aux in caminho:
         #     print(aux.getTab())
-    else: 
-        print('Fracasso')

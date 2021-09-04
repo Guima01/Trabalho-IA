@@ -41,7 +41,7 @@ def verificaRepeticao(no) :
             return False
     return True
 
-def moveBaixo(no):
+def verificaCima(no):
     i, j = buscaVazio(no.getTab())   # Busca a posição do -
     tab = copy.deepcopy(no.getTab())  #cria uma copia do tabuleiro atual
     global abertos 
@@ -60,7 +60,7 @@ def moveBaixo(no):
                 profundidade = noAux.getCusto()
             abertos.put(noAux)    #Adiciona ele na lista de abertos
     
-def moveEsquerda( no):
+def verificaDireita( no):
     i, j = buscaVazio(no.getTab())
     tab = copy.deepcopy(no.getTab())
     global abertos
@@ -78,7 +78,7 @@ def moveEsquerda( no):
                 profundidade = noAux.getCusto()
             abertos.put(noAux)           
 
-def moveCima(no):
+def verificaBaixo(no):
     i, j = buscaVazio(no.getTab()) 
     tab = copy.deepcopy(no.getTab())
     global abertos
@@ -96,7 +96,7 @@ def moveCima(no):
                 profundidade = noAux.getCusto()
             abertos.put(noAux) 
     
-def moveDireita(no):
+def verificaEsquerda(no):
     global abertos
     i, j = buscaVazio(no.getTab())
     tab = copy.deepcopy(no.getTab())
@@ -146,25 +146,23 @@ def buscaLargura(tabuleiroInicial, tabuleiroFinal, linha, coluna):
                 noResult = no
                 sucesso = True
             else:
-                moveBaixo(no)
-                moveEsquerda(no)
-                moveCima(no)
-                moveDireita(no)
+                verificaCima(no)
+                verificaDireita(no)
+                verificaBaixo(no)
+                verificaEsquerda(no)
                 fechados.append(no)
             # print(no.getTab())
     time_end = time.time()
     print('Tempo de execução: ' + str(time_end - time_init))
+    nos_visitados = len(fechados)
+    nos_expandidos = abertos.qsize() + nos_visitados
+    print('Nos visitados: ' + str(nos_visitados))
+    print('Nos expandidos: ' + str(nos_expandidos))
+    print('Profundidade:' + str(profundidade))
+    print('Fator médio de ramificação:' + str((nos_expandidos-1)/ nos_visitados))
     if sucesso == True:
         retornaCaminho(noResult)
-        nos_visitados = len(fechados)
-        nos_expandidos = abertos.qsize() + nos_visitados
         print('Custo Solução:' + str(noResult.getCusto()))
-        print('Nos visitados: ' + str(nos_visitados))
-        print('Nos expandidos: ' + str(nos_expandidos))
-        print('Profundidade:' + str(profundidade))
-        print('Fator médio de ramificação:' + str((nos_expandidos-1)/ nos_visitados))
         # print('Caminho:')
         # for aux in caminho:
         #     print(aux.getTab())
-    else: 
-        print('Fracasso')
