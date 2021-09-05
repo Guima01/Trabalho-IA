@@ -155,7 +155,7 @@ def backTracking (tabuleiroInicial, tabuleiroFinal, linha, coluna):
 
         elif check == False:
             profundidadeAux = profundidadeAux - 1
-            if no.getfilhoBaixo() == None and no.getfilhoCima == None and no.getfilhoDireita == None and no.getfilhoEsquerda == None:
+            if no.getfilhoBaixo() == None and no.getfilhoCima() == None and no.getfilhoDireita() == None and no.getfilhoEsquerda() == None:
                 folha += 1
             no = no.getPai()
             if no == None:
@@ -170,8 +170,9 @@ def backTracking (tabuleiroInicial, tabuleiroFinal, linha, coluna):
     print('Profundidade:' + str(profundidade))
     print('Fator médio de ramificação:' + str((nos_expandidos-1)/ (nos_visitados - folha)))
     if sucesso == True:
+        print()
         retornaCaminho(no)
-        print('Custo Solução:' + str(no.getCusto()))
-        # print('Caminho:')
-        # for aux in caminho:
-        #     print(aux.getTab())
+        # print('Custo Solução:' + str(no.getCusto()))
+        print('Caminho:')
+        for aux in caminho:
+            print(aux.getTab())

@@ -161,8 +161,9 @@ def buscaProfundidade(tabuleiroInicial, tabuleiroFinal, linha, coluna):
     print('Profundidade:' + str(profundidade))
     print('Fator médio de ramificação:' + str((nos_expandidos-1)/ nos_visitados))
     if sucesso == True:
-        retornaCaminho(noResult)
-        print('Custo Solução:' + str(noResult.getCusto()))
+        print()
+        # retornaCaminho(noResult)
+        # print('Custo Solução:' + str(noResult.getCusto()))
         # print('Caminho:')
         # for aux in caminho:
         #     print(aux.getTab())

@@ -225,15 +225,17 @@ def buscaIDAStar(tabuleiroInicial, tabuleiroFinal, linha, coluna):
                         s = copy.deepcopy(raiz)
                         no = s
                         descartados = None
-                        profundidade = 0
-                        profundidadeAux = 0
-                        folha = 0
-                        nos_expandidos = 0
-                        nos_visitados = 0
+                        if patamar_old != patamar and patamar != None:
+                            profundidade = 0
+                            profundidadeAux = 0
+                            folha = 0
+                            nos_expandidos = 0
+                            nos_visitados = 0
                         
                     else:
                         profundidadeAux -= 1
-                        folha += 1
+                        if no.getfilhoBaixo() == None and no.getfilhoCima() == None and no.getfilhoDireita() == None and no.getfilhoEsquerda() == None:
+                            folha += 1
                         no = no.getPai() 
 
     print
