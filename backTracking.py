@@ -67,6 +67,7 @@ def verificaCima(no):
         tab[i][j] = tab[i+1][j]
         tab[i+1][j] = '-'
         noAux = Node(no, tab)
+        noAux.setCusto(no.getCusto() + 1)
         check = verificaRepeticao(noAux)
         if check == True:
             no.setfilhoCima(noAux)
@@ -81,6 +82,7 @@ def verificaDireita( no):
         tab[i][j] = tab[i][j-1]
         tab[i][j-1] = '-'
         noAux = Node(no, tab)
+        noAux.setCusto(no.getCusto() + 1)
         check = verificaRepeticao(noAux)
         if check == True:
             no.setfilhoDireita(noAux)
@@ -96,6 +98,7 @@ def verificaBaixo(no):
         tab[i][j] = tab[i-1][j]
         tab[i-1][j] = '-'
         noAux = Node(no, tab)
+        noAux.setCusto(no.getCusto() + 1)
         check = verificaRepeticao(noAux)
         if check == True:
             no.setfilhoBaixo(noAux)  
@@ -113,6 +116,7 @@ def verificaEsquerda(no):
         tab[i][j] = tab[i][j+1]
         tab[i][j+1] = '-'
         noAux = Node(no, tab)
+        noAux.setCusto(no.getCusto() + 1)
         check  = verificaRepeticao(noAux)
         if check == True:
             no.setfilhoEsquerda(noAux)
@@ -134,6 +138,7 @@ def backTracking (tabuleiroInicial, tabuleiroFinal, linha, coluna):
     n = linha
     m = coluna   
     raiz = Node(None, copy.deepcopy(tabuleiroInicial))
+    raiz.setCusto(0)
     no = raiz
     sucesso = verificaObjetivo(no.getTab(), tabuleiroFinal)
     fracasso = False
@@ -170,9 +175,8 @@ def backTracking (tabuleiroInicial, tabuleiroFinal, linha, coluna):
     print('Profundidade:' + str(profundidade))
     print('Fator médio de ramificação:' + str((nos_expandidos-1)/ (nos_visitados - folha)))
     if sucesso == True:
-        print()
         retornaCaminho(no)
-        # print('Custo Solução:' + str(no.getCusto()))
-        print('Caminho:')
-        for aux in caminho:
-            print(aux.getTab())
+        print('Custo Solução:' + str(no.getCusto()))
+        # print('Caminho:')
+        # for aux in caminho:
+        #     print(aux.getTab())
